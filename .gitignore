@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Binary
+civil-chain
+
+# Go
+*.test
+*.out
