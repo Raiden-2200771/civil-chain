@@ -30,6 +30,9 @@ func (bc *Blockchain) isTampered() bool {
 		if current.Hash != hash(current) {
 			return true
 		}
+		if i > 0 && current.PrevHash != bc.Blocks[i-1].Hash {
+			return true
+		}
 	}
 	return false
 }

@@ -74,3 +74,18 @@ func TestIsTampered_TamperedData(t *testing.T) {
 		t.Errorf("Data改ざんを検知できていません: got %t", got)
 	}
 }
+
+func TestIsTampered_TamperedDataAndHash(t *testing.T) {
+	bc := newBlockchain()
+	bc.addBlock("田中議員が〇〇法案に賛成票を投じた")
+	bc.addBlock("佐藤議員が〇〇法案に賛成票を投じた")
+
+	bc.Blocks[1].Data = "田中議員が〇〇法案に反対票を投じた"
+	bc.Blocks[1].Hash = hash(bc.Blocks[1])
+
+	got := bc.isTampered()
+
+	if got != true {
+		t.Errorf("Data と Hash 両方の改ざんを検知できていません: got %t", got)
+	}
+}
