@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -11,14 +12,28 @@ type Block struct {
 	Timestamp string
 	Data      string
 	PrevHash  string
+	Nonce     int
 	Hash      string
 }
 
 func hash(b Block) string {
-	record := fmt.Sprintf("%d%s%s%s", b.Index, b.Timestamp, b.Data, b.PrevHash)
+	record := fmt.Sprintf("%d%s%s%s%d", b.Index, b.Timestamp, b.Data, b.PrevHash, b.Nonce)
 	h := sha256.New()
 	h.Write([]byte(record))
 	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+func mine(b Block, difficulty int) Block {
+	prefix := strings.Repeat("0", difficulty)
+
+	for {
+		b.Hash = hash(b)
+
+		if strings.HasPrefix(b.Hash, prefix) {
+			return b
+		}
+		b.Nonce++
+	}
 }
 
 func newBlock(prev Block, data string) Block {

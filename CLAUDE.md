@@ -44,17 +44,20 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] 追加したブロックのPrevHashが前のブロックのHashと一致する
 - [x] 追加したブロックにデータが正しく入る
 
-### isTampered() のテスト（進行中）
+### isTampered() のテスト ✅ 完了
 - [x] 正常なチェーンは `false` を返す
 - [x] Data が改ざんされた場合は `true` を返す
 - [x] Data と Hash が両方改ざんされた場合は `true` を返す（PrevHash チェックが必要）
 
 ### 次のステップ（ステップ2）
 
-#### PoW（Proof of Work）実装
-- [ ] `Block` に `Nonce` フィールドを追加
-- [ ] ハッシュが `0000...` で始まるまで Nonce を増やすマイニング処理
-- [ ] 難易度は固定値
+#### PoW（Proof of Work）実装（進行中）
+- [x] `Block` に `Nonce` フィールドを追加
+- [x] `hash()` に `Nonce` を含めるよう変更
+- [x] `mine(b Block, difficulty int) Block` を実装（Nonce を増やしてハッシュ条件を満たす）
+- [x] `mine()` のテストを書く
+- [ ] `newBlock()` をマイニング対応に更新する
+- [ ] 難易度は固定値（`difficulty=4` を想定）
 
 #### HTTP ノード実装
 - [ ] `GET /chain` — チェーン全体を返す

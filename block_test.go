@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestHash(t *testing.T) {
 	b := Block{
@@ -104,5 +107,54 @@ func TestNewBlockTimestamp(t *testing.T) {
 
 	if next.Timestamp == "" {
 		t.Error("Timestampが空です")
+	}
+}
+
+func TestMine_HashPrefix(t *testing.T) {
+	b := Block{
+		Index:     1,
+		Timestamp: "2026-04-18T10:00:00Z",
+		Data:      "マイニングテスト",
+		PrevHash:  "",
+	}
+	difficulty := 4
+
+	result := mine(b, difficulty)
+
+	prefix := strings.Repeat("0", difficulty)
+	if !strings.HasPrefix(result.Hash, prefix) {
+		t.Errorf("Hashが難易度%dの条件を満たしていません: got %s", difficulty, result.Hash)
+	}
+}
+
+func TestMine_HashIsValid(t *testing.T) {
+	b := Block{
+		Index:     1,
+		Timestamp: "2026-04-18T10:00:00Z",
+		Data:      "マイニングテスト",
+		PrevHash:  "",
+	}
+
+	result := mine(b, 4)
+
+	want := hash(result)
+	if result.Hash != want {
+		t.Errorf("Hashがblock内容と一致しません: got %s, want %s", result.Hash, want)
+	}
+}
+
+func TestMine_NonceIsSet(t *testing.T) {
+	b := Block{
+		Index:     1,
+		Timestamp: "2026-04-18T10:00:00Z",
+		Data:      "マイニングテスト",
+		PrevHash:  "",
+		Nonce:     0,
+	}
+
+	result := mine(b, 4)
+
+	if result.Nonce < 0 {
+		t.Errorf("Nonceが不正な値です: got %d", result.Nonce)
 	}
 }
