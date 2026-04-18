@@ -110,6 +110,17 @@ func TestNewBlockTimestamp(t *testing.T) {
 	}
 }
 
+func TestNewBlock_HashHasPrefix(t *testing.T) {
+	prev := Block{Index: 0, Timestamp: "2026-04-18T10:00:00Z", Data: "Genesis"}
+
+	next := newBlock(prev, "マイニング対応テスト")
+
+	prefix := strings.Repeat("0", difficulty)
+	if !strings.HasPrefix(next.Hash, prefix) {
+		t.Errorf("HashがPoW条件を満たしていません: got %s", next.Hash)
+	}
+}
+
 func TestMine_HashPrefix(t *testing.T) {
 	b := Block{
 		Index:     1,

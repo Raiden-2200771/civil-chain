@@ -36,6 +36,8 @@ func mine(b Block, difficulty int) Block {
 	}
 }
 
+const difficulty = 4
+
 func newBlock(prev Block, data string) Block {
 	b := Block{
 		Index:     prev.Index + 1,
@@ -43,6 +45,6 @@ func newBlock(prev Block, data string) Block {
 		Data:      data,
 		PrevHash:  hash(prev),
 	}
-	b.Hash = hash(b)
+	b = mine(b, difficulty)
 	return b
 }

@@ -56,7 +56,7 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] `hash()` に `Nonce` を含めるよう変更
 - [x] `mine(b Block, difficulty int) Block` を実装（Nonce を増やしてハッシュ条件を満たす）
 - [x] `mine()` のテストを書く
-- [ ] `newBlock()` をマイニング対応に更新する
+- [x] `newBlock()` をマイニング対応に更新する
 - [ ] 難易度は固定値（`difficulty=4` を想定）
 
 #### HTTP ノード実装
