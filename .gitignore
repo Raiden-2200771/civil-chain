@@ -7,3 +7,6 @@ civil-chain
 # Go
 *.test
 *.out
+
+# chain
+chain.json
