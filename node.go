@@ -24,5 +24,7 @@ func blockHandler(w http.ResponseWriter, r *http.Request) {
 	// ブロックをチェーンに追加
 	bc.addBlock(string(body))
 
+	saveChain(bc, "chain.json")
+
 	w.WriteHeader(http.StatusCreated)
 }
