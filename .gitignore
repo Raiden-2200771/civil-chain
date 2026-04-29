@@ -8,5 +8,5 @@ civil-chain
 *.test
 *.out
 
-# chain
-chain.json
+# dir
+data/
