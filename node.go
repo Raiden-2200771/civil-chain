@@ -9,7 +9,7 @@ import (
 var bc = newBlockchain()
 
 func init() {
-	saveChain(bc, "chain.json")
+	saveChain(bc, "data/chain.json")
 }
 
 func chainHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +28,7 @@ func blockHandler(w http.ResponseWriter, r *http.Request) {
 	// ブロックをチェーンに追加
 	bc.addBlock(string(body))
 
-	saveChain(bc, "chain.json")
+	saveChain(bc, "data/chain.json")
 
 	w.WriteHeader(http.StatusCreated)
 }
