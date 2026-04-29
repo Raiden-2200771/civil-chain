@@ -54,18 +54,19 @@ Go言語で実装するブロックチェーンプロジェクト。
 
 ### 次のステップ（ステップ2）
 
-#### PoW（Proof of Work）実装（進行中）
+#### PoW（Proof of Work）実装 ✅ 完了
 - [x] `Block` に `Nonce` フィールドを追加
 - [x] `hash()` に `Nonce` を含めるよう変更
 - [x] `mine(b Block, difficulty int) Block` を実装（Nonce を増やしてハッシュ条件を満たす）
 - [x] `mine()` のテストを書く
 - [x] `newBlock()` をマイニング対応に更新する
-- [ ] 難易度は固定値（`difficulty=4` を想定）
+- [x] 難易度は固定値（`difficulty=4`）
 
-#### HTTP ノード実装
+#### HTTP ノード実装 ✅ 完了
 - [x] `GET /chain` — チェーン全体を返す
 - [x] `POST /block` — ブロックを追加する
 - [x] 標準ライブラリ（`net/http`）のみで実装
+- [x] ポートをコマンドライン引数（`-port`）で指定できるようにする
 
 #### saveChain() のテスト
 - [x] ファイルが作成される
