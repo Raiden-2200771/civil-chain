@@ -62,6 +62,14 @@ func TestSaveChain_InvalidPath(t *testing.T) {
 	}
 }
 
+func TestChainFilePath_Port8080(t *testing.T) {
+	got := chainFilePath("8080")
+	want := "data/chain_8080.json"
+	if got != want {
+		t.Errorf("chainFilePath(\"8080\") = %q, want %q", got, want)
+	}
+}
+
 func TestSaveChain_BlockData(t *testing.T) {
 	bc := newBlockchain()
 	bc.addBlock("田中議員が〇〇法案に賛成票を投じた")
