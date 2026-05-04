@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -17,6 +18,30 @@ func initNode(port string) {
 func chainHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(bc.Blocks)
+}
+
+func fetchChain(url string) ([]Block, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("ステータスコードが不正です: %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var blocks []Block
+	if err := json.Unmarshal(body, &blocks); err != nil {
+		return nil, err
+	}
+
+	return blocks, nil
 }
 
 func blockHandler(w http.ResponseWriter, r *http.Request) {
