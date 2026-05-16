@@ -103,6 +103,39 @@ func TestFetchChain_InvalidJSON_Error(t *testing.T) {
 	}
 }
 
+func TestLongestChain_SameLength_ReturnsA(t *testing.T) {
+	a := []Block{{Index: 0, Data: "chain-a"}, {Index: 1, Data: "chain-a"}}
+	b := []Block{{Index: 0, Data: "chain-b"}, {Index: 1, Data: "chain-b"}}
+
+	got := longestChain(a, b)
+
+	if got[0].Data != "chain-a" {
+		t.Errorf("got %v, want chain-a", got[0].Data)
+	}
+}
+
+func TestLongestChain_AisLonger_ReturnsA(t *testing.T) {
+	a := []Block{{Index: 0}, {Index: 1}, {Index: 2}}
+	b := []Block{{Index: 0}, {Index: 1}}
+
+	got := longestChain(a, b)
+
+	if len(got) != len(a) {
+		t.Errorf("got length %d, want %d", len(got), len(a))
+	}
+}
+
+func TestLongestChain_BisLonger_ReturnsB(t *testing.T) {
+	a := []Block{{Index: 0}, {Index: 1}}
+	b := []Block{{Index: 0}, {Index: 1}, {Index: 2}}
+
+	got := longestChain(a, b)
+
+	if len(got) != len(b) {
+		t.Errorf("got length %d, want %d", len(got), len(b))
+	}
+}
+
 func TestBlockHandler_AddsBlock(t *testing.T) {
 	body := strings.NewReader("テスト発言")
 	req := httptest.NewRequest("POST", "/block", body)

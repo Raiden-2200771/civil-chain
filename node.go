@@ -44,6 +44,13 @@ func fetchChain(url string) ([]Block, error) {
 	return blocks, nil
 }
 
+func longestChain(a, b []Block) []Block {
+	if len(b) > len(a) {
+		return b
+	}
+	return a
+}
+
 func blockHandler(w http.ResponseWriter, r *http.Request) {
 	// リクエストボディからデータを読み込む
 	body, err := io.ReadAll(r.Body)
