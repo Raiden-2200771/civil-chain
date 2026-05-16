@@ -103,6 +103,36 @@ func TestFetchChain_InvalidJSON_Error(t *testing.T) {
 	}
 }
 
+func TestIsValidHash_ValidHash_ReturnsTrue(t *testing.T) {
+	data := "014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9"
+
+	got := isValidHash(data)
+
+	if !got {
+		t.Errorf("got false, want true")
+	}
+}
+
+func TestIsValidHash_InvalidChars_ReturnsFalse(t *testing.T) {
+	data := "014d82gc6825b4b2cg343134e7cz6297773a5e8779f6f9gf16d2d8985c4052z9"
+
+	got := isValidHash(data)
+
+	if got {
+		t.Errorf("got true, want false")
+	}
+}
+
+func TestIsValidHash_WrongLength_ReturnsFalse(t *testing.T) {
+	data := "014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e91"
+
+	got := isValidHash(data)
+
+	if got {
+		t.Errorf("got true, want false")
+	}
+}
+
 func TestLongestChain_SameLength_ReturnsA(t *testing.T) {
 	a := []Block{{Index: 0, Data: "chain-a"}, {Index: 1, Data: "chain-a"}}
 	b := []Block{{Index: 0, Data: "chain-b"}, {Index: 1, Data: "chain-b"}}
@@ -136,8 +166,20 @@ func TestLongestChain_BisLonger_ReturnsB(t *testing.T) {
 	}
 }
 
+func TestBlockHandler_InvalidHash_Returns400(t *testing.T) {
+	body := strings.NewReader("これは生データです")
+	req := httptest.NewRequest("POST", "/block", body)
+	w := httptest.NewRecorder()
+
+	blockHandler(w, req)
+
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("ステータスコードが正しくありません: got %d, want 400", w.Code)
+	}
+}
+
 func TestBlockHandler_AddsBlock(t *testing.T) {
-	body := strings.NewReader("テスト発言")
+	body := strings.NewReader("014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9")
 	req := httptest.NewRequest("POST", "/block", body)
 	w := httptest.NewRecorder()
 	beforeCount := len(bc.Blocks)
