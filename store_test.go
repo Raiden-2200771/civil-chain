@@ -89,8 +89,8 @@ func TestSaveChain_BlockData(t *testing.T) {
 		if got.Timestamp != want.Timestamp {
 			t.Errorf("Block[%d].Timestamp: got %s, want %s", i, got.Timestamp, want.Timestamp)
 		}
-		if got.Data != want.Data {
-			t.Errorf("Block[%d].Data: got %s, want %s", i, got.Data, want.Data)
+		if got.DataHash != want.DataHash {
+			t.Errorf("Block[%d].DataHash: got %s, want %s", i, got.DataHash, want.DataHash)
 		}
 		if got.PrevHash != want.PrevHash {
 			t.Errorf("Block[%d].PrevHash: got %s, want %s", i, got.PrevHash, want.PrevHash)

@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"crypto/sha256"
+	"fmt"
+	"testing"
+)
 
 func TestNewBlockchain_HashGenesisBlock(t *testing.T) {
 	bc := newBlockchain()
@@ -45,10 +49,10 @@ func TestAddBlock_Data(t *testing.T) {
 
 	bc.addBlock("田中議員が〇〇法案に賛成票を投じた")
 
-	want := "田中議員が〇〇法案に賛成票を投じた"
-	got := bc.Blocks[1].Data
+	want := fmt.Sprintf("%x", sha256.Sum256([]byte("田中議員が〇〇法案に賛成票を投じた")))
+	got := bc.Blocks[1].DataHash
 	if got != want {
-		t.Errorf("Dataが正しくありません: got %s, want %s", got, want)
+		t.Errorf("DataHashが正しくありません: got %s, want %s", got, want)
 	}
 }
 
@@ -66,12 +70,12 @@ func TestIsTampered_NotTampered(t *testing.T) {
 func TestIsTampered_TamperedData(t *testing.T) {
 	bc := newBlockchain()
 	bc.addBlock("田中議員が〇〇法案に賛成票を投じた")
-	bc.Blocks[1].Data = "田中議員が〇〇法案に反対票を投じた"
+	bc.Blocks[1].DataHash = fmt.Sprintf("%x", sha256.Sum256([]byte("田中議員が〇〇法案に反対票を投じた")))
 
 	got := bc.isTampered()
 
 	if got != true {
-		t.Errorf("Data改ざんを検知できていません: got %t", got)
+		t.Errorf("DataHash改ざんを検知できていません: got %t", got)
 	}
 }
 
@@ -80,12 +84,12 @@ func TestIsTampered_TamperedDataAndHash(t *testing.T) {
 	bc.addBlock("田中議員が〇〇法案に賛成票を投じた")
 	bc.addBlock("佐藤議員が〇〇法案に賛成票を投じた")
 
-	bc.Blocks[1].Data = "田中議員が〇〇法案に反対票を投じた"
+	bc.Blocks[1].DataHash = fmt.Sprintf("%x", sha256.Sum256([]byte("田中議員が〇〇法案に反対票を投じた")))
 	bc.Blocks[1].Hash = hash(bc.Blocks[1])
 
 	got := bc.isTampered()
 
 	if got != true {
-		t.Errorf("Data と Hash 両方の改ざんを検知できていません: got %t", got)
+		t.Errorf("DataHash と Hash 両方の改ざんを検知できていません: got %t", got)
 	}
 }

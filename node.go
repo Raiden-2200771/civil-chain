@@ -71,12 +71,6 @@ func blockHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !isValidHash(string(body)) {
-		http.Error(w, "データはSHA-256ハッシュ値である必要があります", http.StatusBadRequest)
-		return
-	}
-
-	// ブロックをチェーンに追加
 	bc.addBlock(string(body))
 
 	saveChain(bc, chainPath)

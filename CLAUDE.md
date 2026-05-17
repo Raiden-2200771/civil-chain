@@ -98,6 +98,13 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] 16進数だが64文字でないとき `false` を返す
 - [x] `blockHandler` でバリデーションを呼び出し、不正なデータは `400 Bad Request` を返す
 
+#### DataHash対応 ✅ 完了
+- [x] `Block.Data` フィールドを `Block.DataHash` に変更する
+- [x] `newBlock()` 内で `data` を SHA-256 ハッシュ化してから `DataHash` に格納する
+- [x] ジェネシスブロックの `DataHash` をゼロハッシュ（64個の0）にする
+- [x] `blockHandler` から `isValidHash()` チェックを削除する（書き込み時の保証は `newBlock()` に委譲）
+- [x] 影響範囲の修正（`block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
+
 #### ノード間同期の実装
 - [ ] 起動時に `-peers` フラグでピアのURLを指定できるようにする
 - [ ] `GET /sync` エンドポイントを追加する

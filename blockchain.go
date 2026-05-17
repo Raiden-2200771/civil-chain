@@ -10,7 +10,7 @@ func newBlockchain() Blockchain {
 	genesis := Block{
 		Index:     0,
 		Timestamp: time.Now().Format(time.RFC3339),
-		Data:      "Genesis Block",
+		DataHash:  "0000000000000000000000000000000000000000000000000000000000000000",
 		PrevHash:  "",
 	}
 	genesis.Hash = hash(genesis)

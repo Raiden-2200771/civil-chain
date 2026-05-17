@@ -53,7 +53,7 @@ func TestFetchChain_ReturnsNon200_Error(t *testing.T) {
 func TestFetchChain_ParsesBlocks(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`[{"Index":1,"Timestamp":"2024-01-01","Data":"genesis","PrevHash":"abc","Nonce":42,"Hash":"xyz"}]`))
+		w.Write([]byte(`[{"Index":1,"Timestamp":"2024-01-01","DataHash":"000","PrevHash":"abc","Nonce":42,"Hash":"xyz"}]`))
 	}
 	server := httptest.NewServer(http.HandlerFunc(handler))
 	defer server.Close()
@@ -74,7 +74,7 @@ func TestFetchChain_ParsesBlocks(t *testing.T) {
 	}{
 		{"Index", got.Index, 1},
 		{"Timestamp", got.Timestamp, "2024-01-01"},
-		{"Data", got.Data, "genesis"},
+		{"DataHash", got.DataHash, "000"},
 		{"PrevHash", got.PrevHash, "abc"},
 		{"Nonce", got.Nonce, 42},
 		{"Hash", got.Hash, "xyz"},
@@ -134,13 +134,13 @@ func TestIsValidHash_WrongLength_ReturnsFalse(t *testing.T) {
 }
 
 func TestLongestChain_SameLength_ReturnsA(t *testing.T) {
-	a := []Block{{Index: 0, Data: "chain-a"}, {Index: 1, Data: "chain-a"}}
-	b := []Block{{Index: 0, Data: "chain-b"}, {Index: 1, Data: "chain-b"}}
+	a := []Block{{Index: 0, DataHash: "000"}, {Index: 1, DataHash: "000"}}
+	b := []Block{{Index: 0, DataHash: "111"}, {Index: 1, DataHash: "111"}}
 
 	got := longestChain(a, b)
 
-	if got[0].Data != "chain-a" {
-		t.Errorf("got %v, want chain-a", got[0].Data)
+	if got[0].DataHash != "000" {
+		t.Errorf("got %v, want chain-a", got[0].DataHash)
 	}
 }
 
@@ -166,20 +166,9 @@ func TestLongestChain_BisLonger_ReturnsB(t *testing.T) {
 	}
 }
 
-func TestBlockHandler_InvalidHash_Returns400(t *testing.T) {
-	body := strings.NewReader("これは生データです")
-	req := httptest.NewRequest("POST", "/block", body)
-	w := httptest.NewRecorder()
-
-	blockHandler(w, req)
-
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("ステータスコードが正しくありません: got %d, want 400", w.Code)
-	}
-}
 
 func TestBlockHandler_AddsBlock(t *testing.T) {
-	body := strings.NewReader("014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9")
+	body := strings.NewReader("田中議員が〇〇法案に賛成票を投じた")
 	req := httptest.NewRequest("POST", "/block", body)
 	w := httptest.NewRecorder()
 	beforeCount := len(bc.Blocks)

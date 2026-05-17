@@ -1,15 +1,19 @@
 package main
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"strings"
 	"testing"
 )
+
+var dataHash string = "0000000000000000000000000000000000000000000000000000000000000000"
 
 func TestHash(t *testing.T) {
 	b := Block{
 		Index:     0,
 		Timestamp: "2026-04-04T10:00:00Z",
-		Data:      "テストデータ",
+		DataHash:  dataHash,
 		PrevHash:  "",
 	}
 
@@ -24,7 +28,7 @@ func TestHashConsistency(t *testing.T) {
 	b := Block{
 		Index:     0,
 		Timestamp: "2026-04-04T10:00:00Z",
-		Data:      "テストデータ",
+		DataHash:  dataHash,
 		PrevHash:  "",
 	}
 
@@ -40,13 +44,13 @@ func TestHashDifference(t *testing.T) {
 	b1 := Block{
 		Index:     0,
 		Timestamp: "2026-04-04T10:00:00Z",
-		Data:      "発言A",
+		DataHash:  dataHash,
 		PrevHash:  "",
 	}
 	b2 := Block{
 		Index:     0,
 		Timestamp: "2026-04-04T10:00:00Z",
-		Data:      "発言B",
+		DataHash:  "0000000000000000000000000000000000000000000000000000000000000001",
 		PrevHash:  "",
 	}
 
@@ -73,13 +77,14 @@ func TestNewBlockData(t *testing.T) {
 
 	next := newBlock(prev, "政治家の発言")
 
-	if next.Data != "政治家の発言" {
-		t.Errorf("Dataが正しくありません: got %s, want 政治家の発言", next.Data)
+	want := fmt.Sprintf("%x", sha256.Sum256([]byte("政治家の発言")))
+	if next.DataHash != want {
+		t.Errorf("DataHashが正しくありません: got %s, want %s", next.DataHash, want)
 	}
 }
 
 func TestNewBlockPrevHash(t *testing.T) {
-	prev := Block{Index: 0, Timestamp: "2026-04-05T10:00:00Z", Data: "元のデータ"}
+	prev := Block{Index: 0, Timestamp: "2026-04-05T10:00:00Z", DataHash: dataHash}
 
 	next := newBlock(prev, "次のデータ")
 
@@ -90,7 +95,7 @@ func TestNewBlockPrevHash(t *testing.T) {
 }
 
 func TestNewBlockHash(t *testing.T) {
-	prev := Block{Index: 0, Timestamp: "2026-04-05T10:00:00Z", Data: "元のデータ"}
+	prev := Block{Index: 0, Timestamp: "2026-04-05T10:00:00Z", DataHash: dataHash}
 
 	next := newBlock(prev, "次のデータ")
 
@@ -111,7 +116,7 @@ func TestNewBlockTimestamp(t *testing.T) {
 }
 
 func TestNewBlock_HashHasPrefix(t *testing.T) {
-	prev := Block{Index: 0, Timestamp: "2026-04-18T10:00:00Z", Data: "Genesis"}
+	prev := Block{Index: 0, Timestamp: "2026-04-18T10:00:00Z", DataHash: dataHash}
 
 	next := newBlock(prev, "マイニング対応テスト")
 
@@ -125,7 +130,7 @@ func TestMine_HashPrefix(t *testing.T) {
 	b := Block{
 		Index:     1,
 		Timestamp: "2026-04-18T10:00:00Z",
-		Data:      "マイニングテスト",
+		DataHash:  dataHash,
 		PrevHash:  "",
 	}
 	difficulty := 4
@@ -142,7 +147,7 @@ func TestMine_HashIsValid(t *testing.T) {
 	b := Block{
 		Index:     1,
 		Timestamp: "2026-04-18T10:00:00Z",
-		Data:      "マイニングテスト",
+		DataHash:  dataHash,
 		PrevHash:  "",
 	}
 
@@ -158,7 +163,7 @@ func TestMine_NonceIsSet(t *testing.T) {
 	b := Block{
 		Index:     1,
 		Timestamp: "2026-04-18T10:00:00Z",
-		Data:      "マイニングテスト",
+		DataHash:  dataHash,
 		PrevHash:  "",
 		Nonce:     0,
 	}
