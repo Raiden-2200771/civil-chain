@@ -105,11 +105,33 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] `blockHandler` から `isValidHash()` チェックを削除する（書き込み時の保証は `newBlock()` に委譲）
 - [x] 影響範囲の修正（`block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
 
+#### SHA256 型の導入（型レベルで平文混入を防ぐ）
+- [ ] `hash/sha256.go` を作成する
+- [ ] `SHA256` 構造体を定義する（`value string` は非公開）
+- [ ] `New(data string) SHA256` を実装する（内部でSHA-256ハッシュ化）
+- [ ] `String() string` メソッドを実装する（hex文字列を返す）
+- [ ] `MarshalJSON` / `UnmarshalJSON` を実装する（JSONで文字列として扱う）
+- [ ] `Block.DataHash` の型を `hash.SHA256` に変更する
+- [ ] ジェネシスブロックのゼロハッシュを `hash.SHA256` で表現する
+- [ ] 影響範囲の修正（`block.go` / `block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
+
+##### SHA256 型のテスト
+- [x] `New()` が同じデータから同じ値を返す
+- [x] `New()` が異なるデータから異なる値を返す
+- [ ] `String()` が64文字の16進数文字列を返す
+- [ ] `Zero()` が64個の0の文字列を返す
+- [ ] `MarshalJSON` でJSON文字列としてシリアライズされる
+- [ ] `UnmarshalJSON` でJSON文字列からデシリアライズされる
+
 #### ノード間同期の実装
 - [ ] 起動時に `-peers` フラグでピアのURLを指定できるようにする
 - [ ] `GET /sync` エンドポイントを追加する
 - [ ] `/sync` を叩くとピアのチェーンを取得し、最長チェーンルールを適用する
+- [ ] `isValidHash()` で受信したブロックの `DataHash` を検証し、不正なブロックを弾く
 - [ ] 2ノードを起動して最長チェーンルールが機能することを確認する
+
+#### Zenn記事の修正
+- [ ] 「ブロックチェーンに平文データを入れてはいけない理由」に DataHash 対応の変更を反映する
 
 ## 設計原則
 
