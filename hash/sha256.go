@@ -15,7 +15,7 @@ func New(data string) SHA256 {
 }
 
 func Zero() SHA256 {
-	return SHA256{}
+	return SHA256{value: "0000000000000000000000000000000000000000000000000000000000000000"}
 }
 
 func (h SHA256) String() string {
