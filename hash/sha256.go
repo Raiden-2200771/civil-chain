@@ -2,6 +2,7 @@ package hash
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 )
 
@@ -20,4 +21,8 @@ func Zero() SHA256 {
 
 func (h SHA256) String() string {
 	return h.value
+}
+
+func (h SHA256) MarshalJSON() ([]byte, error) {
+	return json.Marshal(h.value)
 }

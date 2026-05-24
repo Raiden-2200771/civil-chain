@@ -1,6 +1,7 @@
 package hash_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"civil-chain/hash"
@@ -21,6 +22,20 @@ func TestNew_DifferentDataReturnsDifferentHash(t *testing.T) {
 
 	if h1 == h2 {
 		t.Errorf("異なるデータなのに同じハッシュが返りました: %v", h1)
+	}
+}
+
+func TestMarshalJSON_SerializesAsString(t *testing.T) {
+	h := hash.New("テスト公約")
+
+	b, err := json.Marshal(h)
+
+	if err != nil {
+		t.Fatalf("MarshalJSONでエラーが発生しました: %v", err)
+	}
+	want := `"` + h.String() + `"`
+	if string(b) != want {
+		t.Errorf("MarshalJSONが正しくありません: got %s, want %s", string(b), want)
 	}
 }
 
