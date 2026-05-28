@@ -26,3 +26,12 @@ func (h SHA256) String() string {
 func (h SHA256) MarshalJSON() ([]byte, error) {
 	return json.Marshal(h.value)
 }
+
+func (h *SHA256) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	h.value = s
+	return nil
+}

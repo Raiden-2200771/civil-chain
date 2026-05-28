@@ -39,6 +39,21 @@ func TestMarshalJSON_SerializesAsString(t *testing.T) {
 	}
 }
 
+func TestUnmarshalJSON_DeserializesFromString(t *testing.T) {
+	h := hash.New("テスト公約")
+	b, _ := json.Marshal(h)
+
+	var got hash.SHA256
+	err := json.Unmarshal(b, &got)
+
+	if err != nil {
+		t.Fatalf("UnmarshalJSONでエラーが発生しました: %v", err)
+	}
+	if got != h {
+		t.Errorf("UnmarshalJSONが正しくありません: got %s, want %s", got.String(), h.String())
+	}
+}
+
 func TestZero_Returns64Zeros(t *testing.T) {
 	h := hash.Zero()
 
