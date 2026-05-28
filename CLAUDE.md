@@ -106,11 +106,11 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] 影響範囲の修正（`block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
 
 #### SHA256 型の導入（型レベルで平文混入を防ぐ）
-- [ ] `hash/sha256.go` を作成する
-- [ ] `SHA256` 構造体を定義する（`value string` は非公開）
-- [ ] `New(data string) SHA256` を実装する（内部でSHA-256ハッシュ化）
-- [ ] `String() string` メソッドを実装する（hex文字列を返す）
-- [ ] `MarshalJSON` / `UnmarshalJSON` を実装する（JSONで文字列として扱う）
+- [x] `hash/sha256.go` を作成する
+- [x] `SHA256` 構造体を定義する（`value string` は非公開）
+- [x] `New(data string) SHA256` を実装する（内部でSHA-256ハッシュ化）
+- [x] `String() string` メソッドを実装する（hex文字列を返す）
+- [x] `MarshalJSON` / `UnmarshalJSON` を実装する（JSONで文字列として扱う）
 - [ ] `Block.DataHash` の型を `hash.SHA256` に変更する
 - [ ] ジェネシスブロックのゼロハッシュを `hash.SHA256` で表現する
 - [ ] 影響範囲の修正（`block.go` / `block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
@@ -121,7 +121,7 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] `String()` がSHA256（64文字の16進数文字列）を返す
 - [x] `Zero()` が64個の0の文字列を返す
 - [x] `MarshalJSON` でJSON文字列としてシリアライズされる
-- [ ] `UnmarshalJSON` でJSON文字列からデシリアライズされる
+- [x] `UnmarshalJSON` でJSON文字列からデシリアライズされる
 
 #### ノード間同期の実装
 - [ ] 起動時に `-peers` フラグでピアのURLを指定できるようにする
