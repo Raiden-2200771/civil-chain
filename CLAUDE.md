@@ -112,9 +112,10 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] `New(data string) SHA256` を実装する（内部でSHA-256ハッシュ化）
 - [x] `String() string` メソッドを実装する（hex文字列を返す）
 - [x] `MarshalJSON` / `UnmarshalJSON` を実装する（JSONで文字列として扱う）
-- [ ] `Block.DataHash` の型を `hash.SHA256` に変更する
-- [ ] ジェネシスブロックのゼロハッシュを `hash.SHA256` で表現する
-- [ ] 影響範囲の修正（`block.go` / `block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
+- [x] `Block.DataHash` の型を `hash.SHA256` に変更する
+- [x] ジェネシスブロックのゼロハッシュを `hash.SHA256` で表現する
+- [x] 影響範囲の修正（`block.go` / `block_test.go` / `blockchain.go` / `blockchain_test.go` / `node.go` / `node_test.go` / `store_test.go`）
+- [x] ノードを起動して `GET /chain` と `POST /block` の動作確認
 
 ##### SHA256 型のテスト
 - [x] `New()` が同じデータから同じ値を返す
