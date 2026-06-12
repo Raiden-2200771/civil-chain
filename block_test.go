@@ -1,13 +1,14 @@
 package main
 
 import (
+	"civil-chain/hash"
 	"crypto/sha256"
 	"fmt"
 	"strings"
 	"testing"
 )
 
-var dataHash string = "0000000000000000000000000000000000000000000000000000000000000000"
+var dataHash = hash.Zero()
 
 func TestHash(t *testing.T) {
 	b := Block{
@@ -17,7 +18,7 @@ func TestHash(t *testing.T) {
 		PrevHash:  "",
 	}
 
-	result := hash(b)
+	result := hashBlock(b)
 
 	if result == "" {
 		t.Error("ハッシュ値が空です")
@@ -32,8 +33,8 @@ func TestHashConsistency(t *testing.T) {
 		PrevHash:  "",
 	}
 
-	result1 := hash(b)
-	result2 := hash(b)
+	result1 := hashBlock(b)
+	result2 := hashBlock(b)
 
 	if result1 != result2 {
 		t.Errorf("同じ入力なのに異なるハッシュが返りました: %s != %s", result1, result2)
@@ -50,12 +51,12 @@ func TestHashDifference(t *testing.T) {
 	b2 := Block{
 		Index:     0,
 		Timestamp: "2026-04-04T10:00:00Z",
-		DataHash:  "0000000000000000000000000000000000000000000000000000000000000001",
+		DataHash:  hash.New("1"),
 		PrevHash:  "",
 	}
 
-	result1 := hash(b1)
-	result2 := hash(b2)
+	result1 := hashBlock(b1)
+	result2 := hashBlock(b2)
 
 	if result1 == result2 {
 		t.Errorf("異なるデータなのに同じハッシュが返りました: %s == %s", result1, result2)
@@ -72,14 +73,14 @@ func TestNewBlockIndex(t *testing.T) {
 	}
 }
 
-func TestNewBlockData(t *testing.T) {
+func TestNewBlockDataHash(t *testing.T) {
 	prev := Block{Index: 0}
 
-	next := newBlock(prev, "政治家の発言")
+	next := newBlock(prev, "テスト公約")
 
-	want := fmt.Sprintf("%x", sha256.Sum256([]byte("政治家の発言")))
-	if next.DataHash != want {
-		t.Errorf("DataHashが正しくありません: got %s, want %s", next.DataHash, want)
+	want := fmt.Sprintf("%x", sha256.Sum256([]byte("テスト公約")))
+	if next.DataHash.String() != want {
+		t.Errorf("DataHashが正しくありません: got %s, want %s", next.DataHash.String(), want)
 	}
 }
 
@@ -88,7 +89,7 @@ func TestNewBlockPrevHash(t *testing.T) {
 
 	next := newBlock(prev, "次のデータ")
 
-	want := hash(prev)
+	want := hashBlock(prev)
 	if next.PrevHash != want {
 		t.Errorf("PrevHashが正しくありません: got %s, want %s", next.PrevHash, want)
 	}
@@ -99,7 +100,7 @@ func TestNewBlockHash(t *testing.T) {
 
 	next := newBlock(prev, "次のデータ")
 
-	want := hash(next)
+	want := hashBlock(next)
 	if next.Hash != want {
 		t.Errorf("Hashが正しくありません: got %s, want %s", next.Hash, want)
 	}
@@ -153,7 +154,7 @@ func TestMine_HashIsValid(t *testing.T) {
 
 	result := mine(b, 4)
 
-	want := hash(result)
+	want := hashBlock(result)
 	if result.Hash != want {
 		t.Errorf("Hashがblock内容と一致しません: got %s, want %s", result.Hash, want)
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"civil-chain/hash"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -74,7 +75,7 @@ func TestFetchChain_ParsesBlocks(t *testing.T) {
 	}{
 		{"Index", got.Index, 1},
 		{"Timestamp", got.Timestamp, "2024-01-01"},
-		{"DataHash", got.DataHash, "000"},
+		{"DataHash", got.DataHash.String(), "000"},
 		{"PrevHash", got.PrevHash, "abc"},
 		{"Nonce", got.Nonce, 42},
 		{"Hash", got.Hash, "xyz"},
@@ -134,12 +135,12 @@ func TestIsValidHash_WrongLength_ReturnsFalse(t *testing.T) {
 }
 
 func TestLongestChain_SameLength_ReturnsA(t *testing.T) {
-	a := []Block{{Index: 0, DataHash: "000"}, {Index: 1, DataHash: "000"}}
-	b := []Block{{Index: 0, DataHash: "111"}, {Index: 1, DataHash: "111"}}
+	a := []Block{{Index: 0, DataHash: hash.New("000")}, {Index: 1, DataHash: hash.New("000")}}
+	b := []Block{{Index: 0, DataHash: hash.New("111")}, {Index: 1, DataHash: hash.New("111")}}
 
 	got := longestChain(a, b)
 
-	if got[0].DataHash != "000" {
+	if got[0].DataHash != hash.New("000") {
 		t.Errorf("got %v, want chain-a", got[0].DataHash)
 	}
 }

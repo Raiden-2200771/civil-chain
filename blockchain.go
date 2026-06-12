@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"civil-chain/hash"
+	"time"
+)
 
 type Blockchain struct {
 	Blocks []Block
@@ -10,10 +13,10 @@ func newBlockchain() Blockchain {
 	genesis := Block{
 		Index:     0,
 		Timestamp: time.Now().Format(time.RFC3339),
-		DataHash:  "0000000000000000000000000000000000000000000000000000000000000000",
+		DataHash:  hash.Zero(),
 		PrevHash:  "",
 	}
-	genesis.Hash = hash(genesis)
+	genesis.Hash = hashBlock(genesis)
 
 	return Blockchain{Blocks: []Block{genesis}}
 }
@@ -27,7 +30,7 @@ func (bc *Blockchain) addBlock(data string) {
 func (bc *Blockchain) isTampered() bool {
 	for i := 0; i < len(bc.Blocks); i++ {
 		current := bc.Blocks[i]
-		if current.Hash != hash(current) {
+		if current.Hash != hashBlock(current) {
 			return true
 		}
 		if i > 0 && current.PrevHash != bc.Blocks[i-1].Hash {
