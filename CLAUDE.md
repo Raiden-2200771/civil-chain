@@ -125,11 +125,22 @@ Go言語で実装するブロックチェーンプロジェクト。
 - [x] `MarshalJSON` でJSON文字列としてシリアライズされる
 - [x] `UnmarshalJSON` でJSON文字列からデシリアライズされる
 
+#### IsSHA256String の導入（外部データのバリデーション）
+- [ ] `hash.IsSHA256String(s string) bool` を `hash` パッケージに実装する（64文字の16進数文字列のみ `true`）
+- [ ] `UnmarshalJSON` 内で `IsSHA256String` を呼び出し、不正な文字列はエラーを返す
+- [ ] `main` パッケージの `isValidHash()` を削除する
+- [ ] `node_test.go` の `isValidHash` テストを `hash` パッケージのテストに移譲する
+
+##### IsSHA256String のテスト
+- [ ] 64文字の16進数文字列のとき `true` を返す
+- [ ] 64文字だが16進数以外の文字が含まれるとき `false` を返す
+- [ ] 16進数だが64文字でないとき `false` を返す
+
 #### ノード間同期の実装
 - [ ] 起動時に `-peers` フラグでピアのURLを指定できるようにする
 - [ ] `GET /sync` エンドポイントを追加する
 - [ ] `/sync` を叩くとピアのチェーンを取得し、最長チェーンルールを適用する
-- [ ] `isValidHash()` で受信したブロックの `DataHash` を検証し、不正なブロックを弾く
+- [ ] `hash.IsSHA256String()` で受信したブロックの `DataHash` を検証し、不正なブロックを弾く
 - [ ] 2ノードを起動して最長チェーンルールが機能することを確認する
 
 #### Zenn記事の修正
