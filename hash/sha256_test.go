@@ -72,6 +72,45 @@ func TestUnmarshalJSON_DeserializesFromString(t *testing.T) {
 	}
 }
 
+func TestIsSHA256String_ValidHash_ReturnsTrue(t *testing.T) {
+	s := "014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9"
+
+	got := hash.IsSHA256String(s)
+
+	if !got {
+		t.Errorf("got false, want true")
+	}
+}
+
+func TestIsSHA256String_InvalidChars_ReturnsFalse(t *testing.T) {
+	s := "014d82gc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9"
+
+	got := hash.IsSHA256String(s)
+
+	if got {
+		t.Errorf("got true, want false")
+	}
+}
+
+func TestIsSHA256String_WrongLength_ReturnsFalse(t *testing.T) {
+	s := "014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9" + "a"
+
+	got := hash.IsSHA256String(s)
+
+	if got {
+		t.Errorf("got true, want false")
+	}
+}
+
+func TestUnmarshalJSON_InvalidSHA256_ReturnsError(t *testing.T) {
+	var h hash.SHA256
+	err := json.Unmarshal([]byte(`"not-a-sha256"`), &h)
+
+	if err == nil {
+		t.Errorf("got nil, want error")
+	}
+}
+
 func TestZero_Returns64Zeros(t *testing.T) {
 	h := hash.Zero()
 
@@ -80,4 +119,3 @@ func TestZero_Returns64Zeros(t *testing.T) {
 		t.Errorf("Zero()が正しくありません: got %s, want %s", h.String(), want)
 	}
 }
-

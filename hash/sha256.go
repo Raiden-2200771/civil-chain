@@ -27,10 +27,25 @@ func (h SHA256) MarshalJSON() ([]byte, error) {
 	return json.Marshal(h.value)
 }
 
+func IsSHA256String(s string) bool {
+	if len(s) != 64 {
+		return false
+	}
+	for _, c := range s {
+		if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
+			return false
+		}
+	}
+	return true
+}
+
 func (h *SHA256) UnmarshalJSON(data []byte) error {
 	var s string
 	if err := json.Unmarshal(data, &s); err != nil {
 		return err
+	}
+	if !IsSHA256String(s) {
+		return fmt.Errorf("invalid SHA256 string: %s", s)
 	}
 	h.value = s
 	return nil

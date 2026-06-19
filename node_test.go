@@ -54,7 +54,7 @@ func TestFetchChain_ReturnsNon200_Error(t *testing.T) {
 func TestFetchChain_ParsesBlocks(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`[{"Index":1,"Timestamp":"2024-01-01","DataHash":"000","PrevHash":"abc","Nonce":42,"Hash":"xyz"}]`))
+		w.Write([]byte(`[{"Index":1,"Timestamp":"2024-01-01","DataHash":"014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9","PrevHash":"abc","Nonce":42,"Hash":"xyz"}]`))
 	}
 	server := httptest.NewServer(http.HandlerFunc(handler))
 	defer server.Close()
@@ -62,7 +62,7 @@ func TestFetchChain_ParsesBlocks(t *testing.T) {
 	blocks, err := fetchChain(server.URL)
 
 	if err != nil {
-		t.Fatalf("エラーは期待しないが、got: %v", err)
+		t.Fatalf("unexpected error: %v", err)
 	}
 	if len(blocks) != 1 {
 		t.Fatalf("ブロック数が正しくありません: got %d, want 1", len(blocks))
@@ -75,7 +75,7 @@ func TestFetchChain_ParsesBlocks(t *testing.T) {
 	}{
 		{"Index", got.Index, 1},
 		{"Timestamp", got.Timestamp, "2024-01-01"},
-		{"DataHash", got.DataHash.String(), "000"},
+		{"DataHash", got.DataHash.String(), "014d82fc6825b4b2ca343134e7ca6297773a5e8779f6f9df16d2d8985c4052e9"},
 		{"PrevHash", got.PrevHash, "abc"},
 		{"Nonce", got.Nonce, 42},
 		{"Hash", got.Hash, "xyz"},
