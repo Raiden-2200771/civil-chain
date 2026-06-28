@@ -44,18 +44,6 @@ func fetchChain(url string) ([]Block, error) {
 	return blocks, nil
 }
 
-func isValidHash(data string) bool {
-	if len(data) != 64 {
-		return false
-	}
-	for _, c := range data {
-		if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
-			return false
-		}
-	}
-	return true
-}
-
 func longestChain(a, b []Block) []Block {
 	if len(b) > len(a) {
 		return b
