@@ -129,8 +129,8 @@ Go言語で実装するブロックチェーンプロジェクト。
 #### IsSHA256String の導入（外部データのバリデーション）
 - [x] `hash.IsSHA256String(s string) bool` を `hash` パッケージに実装する（64文字の16進数文字列のみ `true`）
 - [x] `UnmarshalJSON` 内で `IsSHA256String` を呼び出し、不正な文字列はエラーを返す
-- [ ] `main` パッケージの `isValidHash()` を削除する ← 次回ここから再開
-- [ ] `node_test.go` の `isValidHash` テストを `hash` パッケージのテストに移譲する
+- [x] `main` パッケージの `isValidHash()` を削除する
+- [x] `node_test.go` の `isValidHash` テストを `hash` パッケージのテストに移譲する
 
 ##### IsSHA256String のテスト
 - [x] 64文字の16進数文字列のとき `true` を返す
